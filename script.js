@@ -1,23 +1,24 @@
 'use strict';
 let attemptsEl = document.getElementById('attempts');
 let containerEl = document.getElementById('container');
-let lifEle = document.getElementById('lifEle');
-let cenEle = document.getElementById('cenEle');
-let rigEle = document.getElementById('rigEle');
+let lifEl = document.getElementById('lifEle');
+let rightEl = document.getElementById('rigEle');
+let cenEl = document.getElementById('cenEle');
 let ulEl = document.getElementById('result');
-
-let caTimg = [];
+let catimgs=[];
 let atmPs = 1;
 let mxAtmps = 25;
 
 
+
+let catimgs=[];
 function CatoImg(cName) {
     
     this.spLname = cName.split('.')[0];
     this.img= 'images/' + cName ;
     this.votes = 0;
     this.views = 0;
-    caTimg.push(this);
+    catimgs.push(this);
 }
 
 let cImg = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg',
@@ -27,82 +28,72 @@ let cImg = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg
 
  for (let i = 0; i < cImg.length; i++) {
     new CatoImg(cImg[i]);
-};console.log(CatoImg);
-
-
-function raNF() {
-
-    return  Math.floor(Math.random() * caTimg.length);
-}
-
-
-let lFIndx;
-let RFIndx;
-let CFIndx;
-
-
-function raNFINd () {
-
-    lFIndx = raNF();
-    CFIndx = raNF();
-    RFIndx = raNF();
-    while (lFIndx === CFIndx || CFIndx === RFIndx || RFIndx=== lFIndx) {
-        lFIndx = raNF();
-        CFIndx = raNF();
-    };
-
 };
 
 
+function raNFimg() {
 
-raNFINd ();
+    return Math.floor(Math.random() * catimgs.length);
+}
 
+let LFIndx;
+let RFIndx;
+let CFIndx;
 
-    lifEle.setAttribute('src', caTimg[lFIndx].img);
-    cenEle.setAttribute('src', caTimg[CFIndx].img);
-    rigEle.setAttribute('src', caTimg[RFIndx].img);
+function renderRandomimg() {
 
-    lifEle.setAttribute('alt', caTimg[lFIndx].spLname);
-    cenEle.setAttribute('alt', caTimg[CFIndx].spLname);
-    rigEle.setAttribute('alt', caTimg[RFIndx].spLname);
+    lFIndx = raNFimg();
+    RFIndx = raNFimg();
+    CFIndx = raNFimg();
+    while (lFIndx === RFIndx || RFIndx === CFIndx || CFIndx === lFIndx) {
+        lFIndx = raNFimg();
+        RFIndx=raNFimg();
+        CFIndx = raNFimg();
+    }
+    lifEl.setAttribute('src', catimg[LFIndx].img);
+    rightEl.setAttribute('src', catimg[RFIndx].img);
+    cenEl.setAttribute('src', catimg[CFIndx].img);
+    lifEl.setAttribute('alt', catimg[LFIndx].spLname);
+    rightEl.setAttribute('alt', catimg[RFIndx].spLname);
+    cenEl.setAttribute('alt', catimg[CFIndx].spLname);
+    lifEl.setAttribute('title', catimg[LFIndx].spLname);
+    rightEl.setAttribute('title', catimg[RFIndx].spLname);
+    cenEl.setAttribute('title', catimg[CFIndx].spLname);
+    
+   catimgs[LFIndx].views++;
+   catimgs[RFIndx].views++;
+   catimgs[CFIndx].views++;
 
-    lifEle.setAttribute('title', caTimg[lFIndx].spLname);
-    cenEle.setAttribute('title', caTimg[CFIndx].spLname);
-    rigEle.setAttribute('title', caTimg[RFIndx].spLname);
+}
 
-   caTimg[lFIndx].views++;
-   caTimg[CFIndx].views++;
-   caTimg[RFIndx].views++;
+renderRandomimg();
 
-   raNFINd ();
-
-
-
-  lifEle.addEventListener('click', handelClicks);
-  cenEle.addEventListener('click', handelClicks);
-  rigEle.addEventListener('click', handelClicks);
+  lifEl.addEventListener('click', handelClicks);
+  rightEl.addEventListener('click', handelClicks);
+  cenEl.addEventListener('click', handelClicks);
 
   function handelClicks(event) {
     if (atmPs <= mxAtmps) {
         let clickedImg = event.target.id;
         if (clickedImg === 'lifEle') {
-           caTimg[lFIndx].votes++;
-        }    else if (clickedImg === 'cenEle') {
-                  caTimg[CFIndx].votes++;
-              } else if (clickedImg === 'rigEle') {
-                caTimg[RFIndx].votes++;
+           catimgs[LFIndx].votes++;
+        }    else if (clickedImg === 'rigele') {
+                  catimgs[rigEle].votes++;
+              } else if (clickedImg === 'cenEle') {
+                catimgs[cenEle].votes++;
             }
        raNFINd();
     } else {
         let ulEl = document.getElementById('result');
-        for (let i = 0; i < caTimg.length; i++) {
+        for (let i = 0; i < catimg.length; i++) {
             let liEl = document.createElement('li');
-            liEl.textContent = `${caTimg[i].spLname} has ${caTimg[i].votes} votes and ${caTimg[i].views} views .`;
+            liEl.textContent = `${catimgs[i].spLname} has ${catimgs[i].votes} votes and ${catimgs[i].views} views .`;
             ulEl.appendChild(liEl);
         }
         lifEle.removeEventListener('click', handelClicks);
-       cenEle.removeEventListener('click', handelClicks);
       rigEle.removeEventListener('click', handelClicks);
+      cenEle.removeEventListener('click', handelClicks);
+
     }
     atmPs++;
 }
